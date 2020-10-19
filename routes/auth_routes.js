@@ -8,7 +8,7 @@ router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/', session: true}),
   (req, res) => {
     console.log('req.user:', req.user);
-    setTimeout(() => res.redirect('/dashboard'), 1000);
+    setTimeout(() => res.redirect('/crawls'), 1000);
     // res.redirect('http://localhost:3000/dashboard');
   }
 );

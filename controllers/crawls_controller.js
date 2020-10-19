@@ -10,9 +10,9 @@ const {
 
 module.exports = {
   index: async (req, res) => {
-    const allCrawls = await getAllCrawls(req);
+    const allCrawls = JSON.parse(JSON.stringify(await getAllCrawls(req)));
     console.log('allCrawls: ', allCrawls);
-    res.send(allCrawls);
+    res.render('crawls/index', { allCrawls });
   },
   create: (req, res) => {
     console.log(req.body);
