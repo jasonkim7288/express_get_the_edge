@@ -12,7 +12,9 @@ module.exports = {
   index: async (req, res) => {
     const allCrawls = JSON.parse(JSON.stringify(await getAllCrawls(req)));
     console.log('allCrawls: ', allCrawls);
-    res.render('crawls/index', { allCrawls });
+    res.render('crawls/index', {
+      allCrawls
+    });
   },
   create: (req, res) => {
     console.log(req.body);
@@ -34,25 +36,25 @@ module.exports = {
 
   },
   show: (req, res) => {
-    
+
   },
   update: (req, res) => {
     if (req.error) {
       res.status(req.error.status);
       res.send(req.error.message);
-  } else {
+    } else {
       // execute the query from updatePost
       updateCrawl(req).exec((err, crawl) => {
-          if (err) {
-              res.status(500);
-              return res.json({
-                  error: err.message
-              });
-          }
-          res.status(200);
-          res.send(crawl);
+        if (err) {
+          res.status(500);
+          return res.json({
+            error: err.message
+          });
+        }
+        res.status(200);
+        res.send(crawl);
       });
-  }
+    }
   },
   destroy: (req, res) => {
     if (req.error) {

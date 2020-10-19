@@ -11,41 +11,41 @@ const addCrawl = (req) => {
 };
 
 const getAllCrawls = async (req) => {
-    let foundCrawls = await Crawl.find({isDefault: true});
-    console.log('foundCrawls:', foundCrawls);
-    if (req.user) {
-        req.user.crawls.forEach(async crawl => {
-            const foundUserCrawl = await Crawl.findById(crawl.crawl);
-            foundCrawls.push(foundUserCrawl);
-        });
+  let foundCrawls = await Crawl.find({ isDefault: true });
+  if (req.user && req.user.crawls.length > 0) {
+    for (let i = 0; i < req.user.crawls.length; i++) {
+      const foundUserCrawl = await Crawl.findById(req.user.crawls[i]._id);
+      foundCrawls.push(foundUserCrawl);
     }
-    return foundCrawls;
+  }
+  console.log('foundCrawls:', foundCrawls);
+  return foundCrawls;
 };
 
 const removeCrawl = (id) => {
-    return Crawl.findByIdAndRemove(id);
+  return Crawl.findByIdAndRemove(id);
 };
 
 const updateCrawl = (req) => {
-    return Crawl.findByIdAndUpdate(req.params.id, req.body, {
-        new: true
-    });
+  return Crawl.findByIdAndUpdate(req.params.id, req.body, {
+    new: true
+  });
 };
 
 const getOneCrawl = (id) => {
-    if(user) {
-        const foundCrawl = user.crawls.some(crawl => crawl.crawl === id);
-        if(foundCrawl) {
-            return Crawl.findById(id);
-        }
+  if(user) {
+    const foundCrawl = user.crawls.some(crawl => crawl.crawl === id);
+    if(foundCrawl) {
+      return Crawl.findById(id);
     }
+  }
 };
 
 
 module.exports = {
-    addCrawl,
-    removeCrawl,
-    updateCrawl,
-    getAllCrawls,
-    getOneCrawl
+  addCrawl,
+  removeCrawl,
+  updateCrawl,
+  getAllCrawls,
+  getOneCrawl
 };
