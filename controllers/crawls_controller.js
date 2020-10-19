@@ -1,10 +1,23 @@
+const {addCrawl} = require('../utils/crawls_utils');
+
+
 
 module.exports = {
   index: (req, res) => {
 
   },
   create: (req, res) => {
-
+    console.log(req.body);
+    addCrawl(req).save((err, crawl) => {
+      if (err) {
+          res.status(500);
+          return res.json({
+              error: err.message
+          });
+      }
+      res.status(201);
+      res.send(crawl);
+    });
   },
   edit: (req, res) => {
 

@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const CrawlSchema = Schema({
   jobTitle: {
-    type: Stirng,
+    type: String,
     required: true
   },
   region: {
-    type: Stirng,
+    type: String,
     required: true
   },
   skills: [
@@ -45,4 +45,6 @@ const CrawlSchema = Schema({
     required: true,
     default: false
   }
-})
+});
+
+module.exports = mongoose.model('crawls', CrawlSchema);
