@@ -7,8 +7,8 @@ router.route('/')
   .get(CrawlsController.index)
   .post(CrawlsController.create);
 
-router.route(':id/edit')
-  .get(CrawlsController.edit)
+router.route('/:id/edit')
+  .get(CrawlsController.edit);
 
 router.route('/new')
   .get(CrawlsController.newForm)

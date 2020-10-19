@@ -26,19 +26,22 @@
 <script>
   document.addEventListener("DOMContentLoaded", function(){
     console.log("here");
-    document.getElementById("crawler").addEventListener('click', (e) => {
-      e.preventDefault();
-      axios.get('api/crawl/start')
-        .then(console.log);
+    const crawlerElement = document.getElementById("crawler");
+    if (crawlerElement) {
+      crawlerElement.addEventListener('click', (e) => {
+        e.preventDefault();
+        axios.get('api/crawl/start')
+          .then(console.log);
 
-      setInterval(() => {
-        axios.get('/api/crawl/check')
-          .then(res => {
-            console.log('res.data.stage:', res.data.stage)
-            document.getElementById('status').innerHTML = res.data.stage;
-          })
-      }, 1000)
-    });
+        setInterval(() => {
+          axios.get('/api/crawl/check')
+            .then(res => {
+              console.log('res.data.stage:', res.data.stage)
+              document.getElementById('status').innerHTML = res.data.stage;
+            })
+        }, 1000)
+      });
+    }
   });
 
 

@@ -1,0 +1,26 @@
+<h1 class="mb-4">Add Crawling information</h1>
+<form action="/crawls" method="post">
+  <div class="form-group field">
+    <label for="jobTitle">Job Title</label>
+    <input type="text" name="jobTitle" class="form-control"/>
+  </div>
+
+  <div class="form-group field">
+    <label for="region">Region</label>
+    <select name="region" class="form-control">
+      <option value="All Brisbane QLD">All Brisbane QLD</option>
+      <option value="All Melbourne VIC">All Melbourne VIC</option>
+      <option value="All Sydney NSW">All Sydney NSW</option>
+    </select>
+  </div>
+
+  <div class="form-group field">
+    <label for="skills">Skills <span class="text-danger">( Please list all the skills with ',' )</span></label>
+    <input type="text" name="skills" class="form-control"/>
+  </div>
+
+  <div class="form-group field mt-5">
+    <button type="submit" class="btn btn-primary btn-block">Create</button>
+  </div>
+
+</form>

@@ -32,13 +32,13 @@ const updateCrawl = (req) => {
     });
 };
 
-const getOneCrawl = (id) => {
-    if(user) {
-        const foundCrawl = user.crawls.some(crawl => crawl.crawl === id);
-        if(foundCrawl) {
-            return Crawl.findById(id);
-        }
+const getOneCrawl = (req) => {
+  if(req.user) {
+    const foundCrawl = user.crawls.some(crawl => crawl.crawl === req.params.id);
+    if(foundCrawl) {
+      return Crawl.findById(req.params.id);
     }
+  }
 };
 
 

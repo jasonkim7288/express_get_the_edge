@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo')(expressSession);
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const path = require("path");
+const methodOverride = require("method-override");
 
 const exphbs = require("express-handlebars");
 
@@ -35,6 +36,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(methodOverride("_method"));
 app.engine(
   "handlebars",
   exphbs({
