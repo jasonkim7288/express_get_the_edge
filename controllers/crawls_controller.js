@@ -2,7 +2,8 @@ const {
   addCrawl,
   removeCrawl,
   updateCrawl,
-  getAllCrawls
+  getAllCrawls,
+  getOneCrawl
 } = require('../utils/crawls_utils');
 
 
@@ -33,7 +34,7 @@ module.exports = {
 
   },
   show: (req, res) => {
-
+    
   },
   update: (req, res) => {
     if (req.error) {
