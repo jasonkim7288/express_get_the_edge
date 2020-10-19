@@ -7,7 +7,8 @@ const passport = require('passport');
 const path = require("path");
 const methodOverride = require("method-override");
 
-const exphbs = require("express-handlebars");
+const exphbs = require('express-handlebars');
+const { select } = require('./helpers/hbs');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -40,6 +41,9 @@ app.use(methodOverride("_method"));
 app.engine(
   "handlebars",
   exphbs({
+    helpers: {
+      select
+    },
     defaultLayout: "main"
   })
 );
