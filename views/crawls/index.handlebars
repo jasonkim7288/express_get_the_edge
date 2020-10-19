@@ -1,6 +1,15 @@
 {{#if user}}
   <h2>Logged in</h2>
-  {{user}}
+  {{#with user}}
+    <h4>
+      {{firstName}} {{lastName}}
+    </h4>
+  {{/with}}
+  <h4>All crawls you have</h4>
+  {{#each allCrawls}}
+      <p>{{jobTitle}}, {{region}}, {{isDefault}} </p>
+  {{/each}}
 {{else}}
   <a href="/auth/google">login</a>
 {{/if}}
+
