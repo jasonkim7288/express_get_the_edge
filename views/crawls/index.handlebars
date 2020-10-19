@@ -1,15 +1,41 @@
 {{#if user}}
-  <h2>Logged in</h2>
   {{#with user}}
-    <h4>
-      {{firstName}} {{lastName}}
-    </h4>
+    <h1>
+      Welcome {{firstName}} {{lastName}}
+    </h1>
   {{/with}}
-  <h4>All crawls you have</h4>
-  {{#each allCrawls}}
-      <p>{{jobTitle}}, {{region}}, {{isDefault}} </p>
-  {{/each}}
+  <h4 class="mb-4">All crawls you have</h4>
+  <div class="row rol-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
+    {{#each allCrawls}}
+      <div class="col mb-4">
+        <div class="card h-100" style="width: 300px">
+          <div class="card-body">
+            <div class="card-title"><h3>{{jobTitle}}</h3></div>
+            <div class="card-text mb-3">Region : {{region}}</div>
+            <div class="card-text">
+              {{#each skills}}
+                {{#if ../isDefault}}
+                  <span class="badge badge-pill badge-primary">{{keyword}}</span>
+                {{else}}
+                  <span class="badge badge-pill badge-success">{{keyword}}</span>
+                {{/if}}
+              {{/each}}
+            </div>
+            {{#unless ../isDefault}}
+              <div class="card-text text-right">
+                <a href="/" class="text-danger">
+                  <i class="far fa-trash-alt"></i>
+                </a>
+              </div>
+            {{/unless}}
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
 {{else}}
-  <a href="/auth/google">login</a>
+  <h1>
+    Please <a href="/auth/google">login</a> first
+  </h1>
 {{/if}}
 

@@ -1,0 +1,17 @@
+<nav class="navbar navbar-light bg-light">
+  <div class="container">
+    {{#if user}}
+      <a href="/crawls" class="navbar-brand font-weight-bolder">On The Edge</a>
+      <a href="/auth/logout">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+      </a>
+    {{else}}
+      <a href="/" class="navbar-brand font-weight-bolder">On The Edge</a>
+      <a href="/auth/google" class="text-danger">
+        <i class="fab fa-google"></i>
+        Login with Google
+      </a>
+    {{/if}}
+  </div>
+</nav>
