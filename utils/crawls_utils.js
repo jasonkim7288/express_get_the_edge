@@ -3,6 +3,7 @@ const Crawl = require('../models/crawl');
 const crawls_controller = require('../controllers/crawls_controller');
 const { find } = require('../models/user');
 const crawl = require('../models/crawl');
+const user = require('../models/user');
 
 
 const addCrawl = (req) => {
@@ -31,10 +32,20 @@ const updateCrawl = (req) => {
     });
 };
 
+const getOneCrawl = (id) => {
+    if(user) {
+        const foundCrawl = user.crawls.some(crawl => crawl.crawl === id);
+        if(foundCrawl) {
+            return Crawl.findById(id);
+        }
+    }
+};
+
 
 module.exports = {
     addCrawl,
     removeCrawl,
     updateCrawl,
-    getAllCrawls
+    getAllCrawls,
+    getOneCrawl
 };

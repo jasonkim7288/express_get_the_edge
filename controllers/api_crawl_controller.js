@@ -7,7 +7,7 @@ module.exports = {
   start: (req, res) => {
     console.log('craw started');
     const crawlId = req.query.crawlId;
-    
+
     if (crawlId) {
       if (req.user) {
         User.findById(req.user._id).populate('crawls.crawl')
