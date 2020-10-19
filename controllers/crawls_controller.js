@@ -12,7 +12,9 @@ module.exports = {
   index: async (req, res) => {
     const allCrawls = JSON.parse(JSON.stringify(await getAllCrawls(req)));
     console.log('allCrawls: ', allCrawls);
-    res.render('crawls/index', { allCrawls });
+    res.render('crawls/index', {
+      allCrawls
+    });
   },
   create: (req, res) => {
     console.log(req.body);
@@ -58,7 +60,7 @@ module.exports = {
         if (err) {
           res.status(500);
           return res.json({
-              error: err.message
+            error: err.message
           });
         }
         res.status(200);
