@@ -22,6 +22,7 @@ module.exports = (passport) => {
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
       email: profile.emails[0].value,
+      photo: profile.photos[0].value
     }
 
     User.findOne({googleID: profile.id})
@@ -38,12 +39,12 @@ module.exports = (passport) => {
   })
   );
   passport.serializeUser((user, done) => {
-    console.log('serializeUser, user:', user)
+    // console.log('serializeUser, user:', user)
     done(null, user._id);
   });
 
   passport.deserializeUser((_id, done) => {
-    console.log('deserializeUser, id' + _id);
+    // console.log('deserializeUser, id' + _id);
     User.findById(_id)
     .then(user => done(null, user));
   });

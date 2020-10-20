@@ -2,9 +2,14 @@
   <div class="container">
     {{#if user}}
       <a href="/crawls" class="navbar-brand font-weight-bolder">Get The Edge</a>
+      {{#with user}}
+      {{#if photo}}
+        <img src="{{photo}}" alt="profile photo" class="ml-auto mr-3" width="40" style="border-radius: 50%;" />
+      {{/if}}
+      {{/with}}
       <a href="/auth/logout">
-        <i class="fas fa-sign-out-alt"></i>
         Logout
+        <i class="fas fa-sign-out-alt"></i>
       </a>
     {{else}}
       <a href="/" class="navbar-brand font-weight-bolder">Get The Edge</a>

@@ -13,9 +13,9 @@ const addCrawl = (req) => {
 const getAllCrawls = async (req) => {
   let foundCrawls = await Crawl.find({ isDefault: true });
   if (req.user && req.user.crawls.length > 0) {
-    for (let i = 0; i < req.user.crawls.length; i++) {
+    for (let i = req.user.crawls.length - 1; i >= 0; i--) {
       const foundUserCrawl = await Crawl.findById(req.user.crawls[i]._id);
-      foundCrawls.push(foundUserCrawl);
+      foundCrawls.unshift(foundUserCrawl);
     }
   }
   // console.log('foundCrawls:', foundCrawls);
