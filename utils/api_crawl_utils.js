@@ -29,7 +29,6 @@ function runCrawl (crawlObject, url, pageNum) {
         hrefs = keysWithAttribs.map(key => `https://www.seek.com.au${$('a')[key].attribs.href}`)
         console.log('keysWithAttribs:', hrefs);
 
-
         if (hrefs && hrefs.length > 0) {
           totalNum += hrefs.length;
           hrefs.forEach((href, index) => {
@@ -113,7 +112,7 @@ function startCrawl(crawlInstance) {
   if (workQueue.length === 0) {
     crawlObject = crawlInstance.toObject();
     counts = crawlObject.skills.map(keyword => ({ keyword: keyword.keyword, count: 0}));
-    workQueue.push({ job: crawlObject });
+    workQueue.push(crawlObject);
     runCrawl(crawlObject, getUrl(crawlObject), 1);
     return 'doing';
   } else {
@@ -121,7 +120,7 @@ function startCrawl(crawlInstance) {
     if (indexFound !== -1) {
       return 'duplicated';
     } else {
-      workQueue.push({ job: crawlInstance.toObject() });
+      workQueue.push(crawlInstance.toObject());
       return 'queued';
     }
   }
@@ -129,10 +128,12 @@ function startCrawl(crawlInstance) {
 
 function checkCrawlId(id) {
   if (workQueue.length === 0) {
+    console.log('workQueue is empty')
     return 'done';
   } else {
-    const indexFound = workQueue.findIndex(job => job._id === id);
+    const indexFound = workQueue.findIndex(job => job._id == id);
     if (indexFound === -1) {
+      console.log('workQueue, workQueue[0]._id, id:', workQueue, workQueue[0]._id, id)
       return 'done';
     } else if (indexFound === 0) {
       return 'doing';

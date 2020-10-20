@@ -37,30 +37,36 @@
       let syncElement = document.querySelector('.sync-wrapper');
       crawlerElement.addEventListener('click', (e) => {
         e.preventDefault();
-        syncElement.classList.remove('d-none');
-        console.log('crawlerElement.dataset.crawlId:', crawlerElement.dataset.crawlId);
-        axios.get(`api/crawl/start/${crawlerElement.dataset.crawlId}`)
-          .then(console.log);
-
-        const checkTimer = setInterval(() => {
-          axios.get(`/api/crawl/check/${crawlerElement.dataset.crawlId}`)
-            .then(res => {
-              console.log('res.data.stage:', res.data.stage)
-              if (res.data.stage === 'done') {
-                syncElement.classList.add('d-none');
-              }
-            })
-        }, 1000)
+        console.log('crawlerElement.dataset.crawlid:', crawlerElement.dataset.crawlid);
+        axios.get(`/api/crawl/start/${crawlerElement.dataset.crawlid}`)
+          .then(res => {
+            if (res.data.result === 'existed') {
+              window.confirm('You have already crawled for today.');
+            } else {
+              syncElement.classList.remove('d-none');
+              const checkTimer = setInterval(() => {
+                axios.get(`/api/crawl/check/${crawlerElement.dataset.crawlid}`)
+                  .then(res => {
+                    console.log('res.data.stage:', res.data.stage)
+                    if (res.data.stage === 'done') {
+                      syncElement.classList.add('d-none');
+                      clearInterval(checkTimer);
+                      window.location.href = `/crawls/${crawlerElement.dataset.crawlid}`;
+                    }
+                  })
+              }, 1000);
+            }
+          });
       });
     }
 
     const chartRecent = document.getElementById('chart-recent');
     if (chartRecent) {
-      // console.log('chartRecent.dataset.crawl:', chartRecent.dataset.crawl)
       const crawlResults = JSON.parse(chartRecent.dataset.crawl).results;
+      console.log('crawlResults:', crawlResults);
       if (crawlResults && crawlResults.length > 0) {
-        const firstResultX = crawlResults[0].keywords.map(keyword => keyword.keyword);        
-        const firstResultY = crawlResults[0].keywords.map(keyword => keyword.count);        
+        const firstResultX = crawlResults[0].skills.map(keyword => keyword.keyword);
+        const firstResultY = crawlResults[0].skills.map(keyword => keyword.count);
         var myChart = new Chart(chartRecent.getContext('2d'), {
           type: 'bar',
           data: {
@@ -80,7 +86,7 @@
                 ticks: {
                   stepSize: 1
                 },
-                
+
               }],
               xAxes: [{
                 gridLines: {
@@ -98,11 +104,11 @@
       // console.log('chartHistory.dataset.crawl:', chartHistory.dataset.crawl)
       const crawlResults = JSON.parse(chartHistory.dataset.crawl).results;
       if (crawlResults && crawlResults.length > 0) {
-        let datasets = crawlResults[0].keywords.map(keyword => ({label: keyword.keyword, fill: false, data: [], borderColor: `rgba(${getRandomNumber(30, 220)}, ${getRandomNumber(30, 220)}, ${getRandomNumber(30, 220)}, 1)`}));
+        let datasets = crawlResults[0].skills.map(keyword => ({label: keyword.keyword, fill: false, data: [], borderColor: `rgba(${getRandomNumber(30, 220)}, ${getRandomNumber(30, 220)}, ${getRandomNumber(30, 220)}, 1)`}));
         let firstResultX = []
         datasets = datasets.map((dataset, index) => {
           crawlResults.forEach(crawlResult => {
-            const foundKeyword = crawlResult.keywords.find(ele => ele.keyword === dataset.label);
+            const foundKeyword = crawlResult.skills.find(ele => ele.keyword === dataset.label);
             const dateCreatedAt = new Date(crawlResult.createdAt);
             const strCreatedAt = dateCreatedAt.getDate() + '-' + (dateCreatedAt.getMonth() + 1) + '-' + dateCreatedAt.getFullYear();
             if (index === 0) {
@@ -131,7 +137,7 @@
                 ticks: {
                   stepSize: 1
                 },
-                
+
               }],
               xAxes: [{
                 gridLines: {

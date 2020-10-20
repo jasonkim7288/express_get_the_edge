@@ -11,7 +11,7 @@ const User = require('../models/user');
 module.exports = {
   index: async (req, res) => {
     const allCrawls = JSON.parse(JSON.stringify(await getAllCrawls(req)));
-    console.log('allCrawls: ', allCrawls);
+    // console.log('allCrawls: ', allCrawls);
     res.render('crawls/index', {
       allCrawls
     });
@@ -75,9 +75,16 @@ module.exports = {
         console.log('err:', err);
         return res.redirect('/cralws')
       }
-      res.render('crawls/show',{ crawlStr: JSON.stringify(crawl), crawl: JSON.parse(JSON.stringify(crawl)) });
+      const oneCrawl = JSON.parse(JSON.stringify(crawl))
+      let strRecentDate = null;
+      if (oneCrawl.results && oneCrawl.results[0]) {
+        const recentDate = new Date(oneCrawl.results[0].createdAt);
+        strRecentDate = recentDate.getDate() + '-' + (recentDate.getMonth() + 1) + '-' + recentDate.getFullYear();
+      }
+      console.log('strRecentDate:', strRecentDate)
+      res.render('crawls/show',{ crawlStr: JSON.stringify(crawl), crawl: oneCrawl, recentDate: strRecentDate });
     })
-    
+
   },
   update: (req, res) => {
     if (req.error) {
@@ -86,6 +93,7 @@ module.exports = {
     } else {
       const strSkills = req.body.skills;
       req.body.skills = strSkills.split(',').map(skill => ({keyword: skill.trim()}))
+      console.log('req.body:', req.body);
       updateCrawl(req).exec((err, crawl) => {
         if (err) {
           res.status(500);
@@ -110,9 +118,19 @@ module.exports = {
             error: err.message
           });
         }
-        res.sendStatus(204);
+        User.findById(req.user._id)
+        .then(curUser => {
+          curUser.crawls = curUser.crawls.filter(crawl => crawl.id != req.params.id);
+          return curUser.save();
+        })
+        .then(savedUser => {
+          res.redirect('/crawls');
+        })
+        .catch(err => {
+          console.log('err:', err);
+          res.redirect('/crawls?err=failed');
+        });
       });
-      res.redirect('/crawls');
     }
   }
 }

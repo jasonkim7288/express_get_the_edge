@@ -18,7 +18,7 @@ const getAllCrawls = async (req) => {
       foundCrawls.push(foundUserCrawl);
     }
   }
-  console.log('foundCrawls:', foundCrawls);
+  // console.log('foundCrawls:', foundCrawls);
   return foundCrawls;
 };
 
@@ -27,7 +27,7 @@ const removeCrawl = (id) => {
 };
 
 const updateCrawl = (req) => {
-  return Crawl.findOneAndUpdate({isDefault: true, _id: req.params.id}, req.body, {new: true});
+  return Crawl.findOneAndUpdate({isDefault: false, _id: req.params.id}, req.body, {new: true});
 };
 
 const getOneCrawl = (req) => {

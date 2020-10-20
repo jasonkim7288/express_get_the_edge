@@ -19,6 +19,13 @@ module.exports = {
             Crawl.findById(crawlId)
             .then(crawl => {
               console.log('crawl:', crawl);
+              if (crawl.results && crawl.results.length > 0) {
+                const createdDate = new Date(crawl.results[0].createdAt);
+                const today = new Date();
+                if (createdDate.getDate() === today.getDate() && createdDate.getMonth() === today.getMonth() && createdDate.getFullYear() === today.getFullYear()) {
+                  return res.json({result: 'existed'});
+                }
+              }
               const result = startCrawl(crawl);
               res.json({crawl, result});
             })
@@ -51,7 +58,7 @@ module.exports = {
     }
   },
   check: (req, res) => {
-    res.json({stage: checkCrawlId(req.params.id)});
+    res.status(200).json({stage: checkCrawlId(req.params.id)});
   },
   create: (req, res) => {
     Crawl.create({
@@ -77,7 +84,7 @@ module.exports = {
           return res.send("success");
         });
       });
-    
+
     Crawl.findById('5f8aab3aa6db7e259849ba55')
       .then(foundCrawl => {
         console.log('foundCrawl:', foundCrawl)
@@ -96,4 +103,3 @@ module.exports = {
       });
   }
 }
-  
