@@ -1,12 +1,12 @@
 const Crawl = require('../models/crawl');
 const User = require('../models/user');
 
-const { startCrawl } = require('../utils/api_crawl_utils');
+const { startCrawl, checkCrawlId } = require('../utils/api_crawl_utils');
 
 module.exports = {
   start: (req, res) => {
     console.log('craw started');
-    const crawlId = req.query.crawlId;
+    const crawlId = req.params.id;
 
     if (crawlId) {
       if (req.user) {
@@ -51,7 +51,7 @@ module.exports = {
     }
   },
   check: (req, res) => {
-    res.json({stage: crawlStage});
+    res.json({stage: checkCrawlId(req.params.id)});
   },
   create: (req, res) => {
     Crawl.create({
@@ -70,6 +70,14 @@ module.exports = {
     res.send('ok');
   },
   addCrawl: (req, res) => {
+    Crawl.findById('5f8aab3aa6db7e259849ba55')
+      .then(foundCrawl => {
+        foundCrawl.results.unshift(foundCrawl.results[0]);
+        foundCrawl.save((err, crawl) => {
+          return res.send("success");
+        });
+      });
+    
     Crawl.findById('5f8aab3aa6db7e259849ba55')
       .then(foundCrawl => {
         console.log('foundCrawl:', foundCrawl)

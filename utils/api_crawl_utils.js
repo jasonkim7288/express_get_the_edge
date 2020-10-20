@@ -108,16 +108,16 @@ function getUrl (crawlInstance) {
   return returnUrl;
 }
 
-function startCrawl (crawlInstance) {
+function startCrawl(crawlInstance) {
   console.log('workQueue:', workQueue);
   if (workQueue.length === 0) {
     crawlObject = crawlInstance.toObject();
     counts = crawlObject.skills.map(keyword => ({ keyword: keyword.keyword, count: 0}));
     workQueue.push({ job: crawlObject });
     runCrawl(crawlObject, getUrl(crawlObject), 1);
-    return 'started';
+    return 'doing';
   } else {
-    indexFound = workQueue.findIndex(job => job._id === crawlObject._id);
+    const indexFound = workQueue.findIndex(job => job._id === crawlInstance._id);
     if (indexFound !== -1) {
       return 'duplicated';
     } else {
@@ -127,4 +127,19 @@ function startCrawl (crawlInstance) {
   }
 }
 
-module.exports = {startCrawl};
+function checkCrawlId(id) {
+  if (workQueue.length === 0) {
+    return 'done';
+  } else {
+    const indexFound = workQueue.findIndex(job => job._id === id);
+    if (indexFound === -1) {
+      return 'done';
+    } else if (indexFound === 0) {
+      return 'doing';
+    } else {
+      return 'queued';
+    }
+  }
+}
+
+module.exports = {startCrawl, checkCrawlId};

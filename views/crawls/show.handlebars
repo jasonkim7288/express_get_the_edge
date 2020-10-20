@@ -1,0 +1,33 @@
+<h1>Crawl information</h1>
+{{#with crawl}}
+  <div class="card h-100">
+    <div class="card-body">
+      <div class="card-title"><h3>{{jobTitle}}</h3></div>
+      <div class="card-text mb-3">Region : {{region}}</div>
+      <div class="card-text mb-3">
+        {{#each skills}}
+          {{#if ../isDefault}}
+            <span class="badge badge-pill badge-primary">{{keyword}}</span>
+          {{else}}
+            <span class="badge badge-pill badge-success">{{keyword}}</span>
+          {{/if}}
+        {{/each}}
+      </div>
+      {{#unless isDefault}}
+        <div class="card-text">
+          {{_id}}
+          <button class="btn btn-primary" id="start-crawl" data-crawlId={{_id}}>Start crawl for today!</button>
+        </div>
+      {{/unless}}
+    </div>
+  </div>
+  <div class="sync-wrapper text-center d-none">
+    <i class="fas fa-sync-alt sync-icon"></i>
+  </div>
+{{/with}}
+
+
+<h2>Recent Result</h2>
+<canvas id="chart-recent" data-crawl="{{crawlStr}}"></canvas>
+<h2>History</h2>
+<canvas id="chart-history" data-crawl="{{crawlStr}}"></canvas>
