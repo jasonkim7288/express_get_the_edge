@@ -19,5 +19,7 @@ You will also be able to see similar technologies and how they compare to the mo
 - Searches around 60 job postings per second. This process is in realtime hence why it's a little slow. :) But it's still much faster than a human is reading through each job individually.<br>
 - Almost instant retrieval of an previously searched job title and keywords as they're stored in the database.
 
+**IMPORTANT**<br>
+When creating and performing a new crawl, please keep in mind that it takes around 1 second to check each job posting and so the larger the search results from the region you set will determine how long you need to wait for the final results. For this reason there is no way to search All of Australia at once.
 
 
