@@ -70,7 +70,14 @@ module.exports = {
     res.render('crawls/new');
   },
   show: (req, res) => {
-
+    getOneCrawl(req).exec((err, crawl) => {
+      if (err) {
+        console.log('err:', err);
+        return res.redirect('/cralws')
+      }
+      res.render('crawls/show',{ crawlStr: JSON.stringify(crawl), crawl: JSON.parse(JSON.stringify(crawl)) });
+    })
+    
   },
   update: (req, res) => {
     if (req.error) {
