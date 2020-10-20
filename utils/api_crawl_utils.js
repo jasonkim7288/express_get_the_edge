@@ -13,6 +13,9 @@ var totalNum = 0;
 
 function runCrawl (crawlObject, url, pageNum) {
   theEndOfPages = false;
+  if (pageNum === 1) {
+    totalNum = 0;
+  }
   const pageUrl = `${url}${pageNum === 1 ? '' : '?page=' + pageNum}`;
   console.log('pageUrl:', pageUrl)
   c.queue([{
@@ -30,7 +33,7 @@ function runCrawl (crawlObject, url, pageNum) {
           return aKey.attribs && aKey.attribs.href && /\/job\//.test(aKey.attribs.href)
         });
         hrefs = keysWithAttribs.map(key => `https://www.seek.com.au${$('a')[key].attribs.href}`)
-        console.log('keysWithAttribs:', hrefs);
+        // console.log('keysWithAttribs:', hrefs);
 
         if (hrefs && hrefs.length > 0) {
           totalNum += hrefs.length;
@@ -90,6 +93,7 @@ function runCrawl (crawlObject, url, pageNum) {
         done();
 
         $('a').each(function (index) {
+          console.log('$(this).text():', $(this).text());
           if ($(this).text() === 'Next') {
             setTimeout(() => {
               runCrawl(crawlObject, url, ++pageNum);
