@@ -112,6 +112,7 @@ module.exports = {
         }
         res.sendStatus(204);
       });
+      res.redirect('/crawls');
     }
   }
 }
