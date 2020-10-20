@@ -13,12 +13,9 @@
           {{/if}}
         {{/each}}
       </div>
-      {{#unless isDefault}}
-        <div class="card-text">
-          {{_id}}
-          <button class="btn btn-primary" id="start-crawl" data-crawlId={{_id}}>Start crawl for today!</button>
-        </div>
-      {{/unless}}
+      <div class="card-text">
+        <button class="btn btn-primary" id="start-crawl" data-crawlid={{_id}}>Start crawl for today!</button>
+      </div>
     </div>
   </div>
   <div class="sync-wrapper text-center d-none">
@@ -26,8 +23,12 @@
   </div>
 {{/with}}
 
-
-<h2>Recent Result</h2>
+<h2 class="mt-5 text-center">
+  Recent Result
+  {{#if recentDate}}
+  ({{recentDate}})
+  {{/if}}
+</h2>
 <canvas id="chart-recent" data-crawl="{{crawlStr}}"></canvas>
-<h2>History</h2>
+<h2 class="mt-5 text-center">History</h2>
 <canvas id="chart-history" data-crawl="{{crawlStr}}"></canvas>
