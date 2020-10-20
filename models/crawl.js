@@ -25,6 +25,10 @@ const CrawlSchema = Schema({
         required: true,
         default: Date.now
       },
+      totalJobs: {
+        type: Number,
+        default: 0
+      },
       skills: [
         {
           keyword: {

@@ -77,12 +77,14 @@ module.exports = {
       }
       const oneCrawl = JSON.parse(JSON.stringify(crawl))
       let strRecentDate = null;
+      let totalJobs = null;
       if (oneCrawl.results && oneCrawl.results[0]) {
         const recentDate = new Date(oneCrawl.results[0].createdAt);
         strRecentDate = recentDate.getDate() + '-' + (recentDate.getMonth() + 1) + '-' + recentDate.getFullYear();
+        totalJobs = oneCrawl.results[0].totalJobs
       }
-      console.log('strRecentDate:', strRecentDate)
-      res.render('crawls/show',{ crawlStr: JSON.stringify(crawl), crawl: oneCrawl, recentDate: strRecentDate });
+      // console.log('strRecentDate:', strRecentDate)
+      res.render('crawls/show',{ crawlStr: JSON.stringify(crawl), crawl: oneCrawl, recentDate: strRecentDate, totalJobs});
     })
 
   },

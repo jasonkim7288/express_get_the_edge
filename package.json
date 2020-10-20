@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon -e js,handlebars server.js"
+    "start": "nodemon -e js,handlebars,css server.js"
   },
   "repository": {
     "type": "git",

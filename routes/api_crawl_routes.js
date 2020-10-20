@@ -5,7 +5,5 @@ const CrawlsController = require('../controllers/api_crawl_controller');
 
 router.get('/start/:id', CrawlsController.start);
 router.get('/check/:id', CrawlsController.check);
-router.get('/create', CrawlsController.create);
-router.get('/addCrawl', CrawlsController.addCrawl);
 
 module.exports = router;
