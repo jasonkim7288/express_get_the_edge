@@ -23,13 +23,12 @@ const getAllCrawls = async (req) => {
 };
 
 const removeCrawl = (id) => {
-  return Crawl.findByIdAndRemove(id);
+  return Crawl.remove({isDefault: false, _id: id});
 };
 
 const updateCrawl = (req) => {
-  return Crawl.findByIdAndUpdate(req.params.id, req.body, {
-    new: true
-  });
+  console.log(req.params.id);
+  return Crawl.findOneAndUpdate({isDefault: true, _id: req.params.id}, req.body, {new: true});
 };
 
 const getOneCrawl = (req) => {
