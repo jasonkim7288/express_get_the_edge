@@ -7,15 +7,17 @@ var c = new Crawler({
 })
 
 var workQueue = [];
-var theEndOfPages;
+var theEndOfPages = [];
 var crawlObject;
 var totalNum = 0;
 
 function runCrawl (crawlObject, url, pageNum) {
-  theEndOfPages = false;
+
   if (pageNum === 1) {
     totalNum = 0;
+    theEndOfPages = [];
   }
+  theEndOfPages[pageNum] = true;
   const pageUrl = `${url}${pageNum === 1 ? '' : '?page=' + pageNum}`;
   console.log('pageUrl:', pageUrl)
   c.queue([{
@@ -34,6 +36,13 @@ function runCrawl (crawlObject, url, pageNum) {
         });
         hrefs = keysWithAttribs.map(key => `https://www.seek.com.au${$('a')[key].attribs.href}`)
         // console.log('keysWithAttribs:', hrefs);
+
+        $('a').each(function (index) {
+          console.log('$(this).text():', $(this).text());
+          if ($(this).text() === 'Next') {
+            theEndOfPages[pageNum] = false;
+          }
+        })
 
         if (hrefs && hrefs.length > 0) {
           totalNum += hrefs.length;
@@ -60,7 +69,7 @@ function runCrawl (crawlObject, url, pageNum) {
                     console.log('totalNum, count:', totalNum, counts);
                   }
 
-                  if (theEndOfPages && index === hrefs.length - 1) {
+                  if (theEndOfPages[pageNum] && index === hrefs.length - 1) {
                     Crawl.findById(crawlObject._id)
                       .then(foundCrawl => {
                         foundCrawl.results.unshift({skills: counts, totalJobs: totalNum});
@@ -82,6 +91,10 @@ function runCrawl (crawlObject, url, pageNum) {
                           runCrawl(crawlObject, getUrl(crawlObject), 1);
                         }
                       });
+                  } else if (!theEndOfPages[pageNum] && index === hrefs.length - 1) {
+                    setTimeout(() => {
+                      runCrawl(crawlObject, url, ++pageNum);
+                    }, 10);
                   }
                 }
                 done();
@@ -91,18 +104,6 @@ function runCrawl (crawlObject, url, pageNum) {
         }
 
         done();
-
-        $('a').each(function (index) {
-          console.log('$(this).text():', $(this).text());
-          if ($(this).text() === 'Next') {
-            setTimeout(() => {
-              runCrawl(crawlObject, url, ++pageNum);
-            }, 10);
-            return false;
-          } else {
-            theEndOfPages = true;
-          }
-        })
       }
     }
   }]);
