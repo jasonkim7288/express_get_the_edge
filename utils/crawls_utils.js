@@ -27,7 +27,6 @@ const removeCrawl = (id) => {
 };
 
 const updateCrawl = (req) => {
-  console.log(req.params.id);
   return Crawl.findOneAndUpdate({isDefault: true, _id: req.params.id}, req.body, {new: true});
 };
 
