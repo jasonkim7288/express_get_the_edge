@@ -11,7 +11,7 @@ var theEndOfPages = [];
 var crawlObject;
 var totalNum = 0;
 
-function runCrawl (crawlObject, url, pageNum) {
+function runCrawl(crawlObject, url, pageNum) {
 
   if (pageNum === 1) {
     totalNum = 0;
@@ -34,15 +34,21 @@ function runCrawl (crawlObject, url, pageNum) {
           aKey = $('a')[key]
           return aKey.attribs && aKey.attribs.href && /\/job\//.test(aKey.attribs.href)
         });
+
         hrefs = keysWithAttribs.map(key => `https://www.seek.com.au${$('a')[key].attribs.href}`)
-        // console.log('keysWithAttribs:', hrefs);
+        console.log('keysWithAttribs:', hrefs);
 
         $('a').each(function (index) {
           console.log('$(this).text():', $(this).text());
           if ($(this).text() === 'Next') {
+            console.log('there is next page');
             theEndOfPages[pageNum] = false;
           }
         })
+
+        if (theEndOfPages[pageNum]) {
+          console.log('It is the end of the pages');
+        }
 
         if (hrefs && hrefs.length > 0) {
           totalNum += hrefs.length;
@@ -51,6 +57,7 @@ function runCrawl (crawlObject, url, pageNum) {
             c.queue([{
               uri: href,
               callback: (err, res, done) => {
+                console.log('uri (href):', href);
                 if (err) {
                   console.log('err:', err);
                 } else {
@@ -72,7 +79,7 @@ function runCrawl (crawlObject, url, pageNum) {
                   if (theEndOfPages[pageNum] && index === hrefs.length - 1) {
                     Crawl.findById(crawlObject._id)
                       .then(foundCrawl => {
-                        foundCrawl.results.unshift({skills: counts, totalJobs: totalNum});
+                        foundCrawl.results.unshift({ skills: counts, totalJobs: totalNum });
                         console.log('foundCrawl.results:', foundCrawl.results);
                         return foundCrawl.save();
                       })
@@ -87,7 +94,7 @@ function runCrawl (crawlObject, url, pageNum) {
                         if (workQueue.length > 0) {
                           totalNum = 0;
                           crawlObject = workQueue[0];
-                          counts = crawlObject.skills.map(keyword => ({ keyword: keyword.keyword, count: 0}));
+                          counts = crawlObject.skills.map(keyword => ({ keyword: keyword.keyword, count: 0 }));
                           runCrawl(crawlObject, getUrl(crawlObject), 1);
                         }
                       });
@@ -101,6 +108,28 @@ function runCrawl (crawlObject, url, pageNum) {
               }
             }])
           })
+        } else {
+          Crawl.findById(crawlObject._id)
+            .then(foundCrawl => {
+              foundCrawl.results.unshift({ skills: counts, totalJobs: totalNum });
+              console.log('foundCrawl.results:', foundCrawl.results);
+              return foundCrawl.save();
+            })
+            .then(res => {
+              console.log('saved');
+            })
+            .catch(err => {
+              console.log('err:', err);
+            })
+            .finally(() => {
+              workQueue.shift();
+              if (workQueue.length > 0) {
+                totalNum = 0;
+                crawlObject = workQueue[0];
+                counts = crawlObject.skills.map(keyword => ({ keyword: keyword.keyword, count: 0 }));
+                runCrawl(crawlObject, getUrl(crawlObject), 1);
+              }
+            });
         }
 
         done();
@@ -109,7 +138,7 @@ function runCrawl (crawlObject, url, pageNum) {
   }]);
 };
 
-function getUrl (crawlInstance) {
+function getUrl(crawlInstance) {
   const jobTitle = crawlInstance.jobTitle.split(' ').join('-') + '-jobs';
   const region = 'in-' + crawlInstance.region.split(' ').join('-');
   const returnUrl = `https://www.seek.com.au/${jobTitle}/${region}`;
@@ -120,7 +149,7 @@ function startCrawl(crawlInstance) {
   console.log('workQueue, length:', workQueue, workQueue.length);
   if (workQueue.length === 0) {
     crawlObject = JSON.parse(JSON.stringify(crawlInstance));
-    counts = crawlObject.skills.map(keyword => ({ keyword: keyword.keyword, count: 0}));
+    counts = crawlObject.skills.map(keyword => ({ keyword: keyword.keyword, count: 0 }));
     workQueue.push(crawlObject);
     console.log('crawlObject:', crawlObject)
     runCrawl(crawlObject, getUrl(crawlObject), 1);
@@ -153,4 +182,4 @@ function checkCrawlId(id) {
   }
 }
 
-module.exports = {startCrawl, checkCrawlId};
+module.exports = { startCrawl, checkCrawlId };
