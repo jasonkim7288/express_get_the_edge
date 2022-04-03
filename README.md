@@ -2,6 +2,7 @@
 - Jason Kim
 - Thomas Doig
 ## **Get The Edge**
+http://get-the-edge.herokuapp.com
 
 A web application designed to allow a user to see the latest skills/technologies in demand, as posted in the hundreds of job listings on any of the big name web sites.
 
